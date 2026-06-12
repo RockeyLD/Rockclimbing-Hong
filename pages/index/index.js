@@ -25,7 +25,7 @@ Page({
         const records = (res.result.data || []).map(r => ({
           ...r,
           id: r._id,
-          mediaUrls: r.mediaList,
+          mediaUrls: r.mediaUrls || r.mediaList || [],
           isLiked: r.isLiked || false
         }))
         this.setData({ records })

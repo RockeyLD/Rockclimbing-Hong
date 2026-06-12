@@ -17,9 +17,21 @@ exports.main = async (event, context) => {
       .limit(pageSize)
       .get()
 
-    const data = recordsRes.data.map(r => ({
-      ...r,
-      isLiked: (r.likedBy || []).includes(OPENID)
+    const data = await Promise.all(recordsRes.data.map(async r => {
+      let mediaUrls = r.mediaList || []
+      if (mediaUrls.length > 0 && typeof mediaUrls[0] === 'string' && mediaUrls[0].startsWith('cloud://')) {
+        try {
+          const tempRes = await cloud.getTempFileURL({ fileList: mediaUrls })
+          mediaUrls = tempRes.fileList.map(f => f.tempFileURL || f.fileID)
+        } catch (e) {
+          console.error('getTempFileURL error:', e)
+        }
+      }
+      return {
+        ...r,
+        isLiked: (r.likedBy || []).includes(OPENID),
+        mediaUrls
+      }
     }))
 
     return { code: 0, data, total, page, pageSize }

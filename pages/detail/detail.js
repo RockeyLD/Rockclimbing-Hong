@@ -34,7 +34,7 @@ Page({
             ...r,
             _id: r._id,
             id: r._id,
-            mediaUrls: r.mediaList
+            mediaUrls: r.mediaUrls || r.mediaList || []
           }
         })
       } else {
