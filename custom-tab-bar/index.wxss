@@ -6,6 +6,7 @@
   height: calc(50rpx + env(safe-area-inset-bottom));
   background: #fff;
   display: flex;
+  align-items: center;
   padding-bottom: env(safe-area-inset-bottom);
   z-index: 999;
 }
@@ -25,19 +26,20 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 50rpx;
 }
 
 .tab-icon {
-  font-size: 34rpx;
+  font-size: 22rpx;
   color: #999;
   font-weight: 300;
   transition: color 0.2s;
   line-height: 1;
-  margin-bottom: 4rpx;
+  margin-bottom: 2rpx;
 }
 
 .tab-text {
-  font-size: 20rpx;
+  font-size: 14rpx;
   color: #999;
   transition: color 0.2s;
 }
