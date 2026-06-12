@@ -78,7 +78,7 @@ Page({
     this.setData({ type, mediaList: [] })
   },
 
-  submit() {
+  async submit() {
     const { mediaList, content, grade, location, date, type } = this.data
 
     if (!content.trim() && mediaList.length === 0) {
@@ -86,29 +86,43 @@ Page({
       return
     }
 
-    const record = {
-      id: 'rec_' + Date.now(),
-      type,
-      content: content.trim(),
-      mediaUrls: mediaList,
-      grade,
-      location: location.trim() || '未知地点',
-      date,
-      likes: 0,
-      isLiked: false,
-      author: '攀岩小达人',
-      avatar: '',
-      createTime: Date.now(),
-      comments: []
+    wx.showLoading({ title: '上传中...' })
+
+    try {
+      const uploadTasks = mediaList.map(filePath => {
+        const ext = filePath.match(/\.([^.]+)$/) ? filePath.match(/\.([^.]+)$/)[1] : 'jpg'
+        const cloudPath = `records/${Date.now()}_${Math.random().toString(36).substr(2, 6)}.${ext}`
+        return wx.cloud.uploadFile({ cloudPath, filePath })
+      })
+
+      const uploadResults = await Promise.all(uploadTasks)
+      const fileIDs = uploadResults.map(r => r.fileID)
+
+      const userInfo = app.globalData.userInfo || {}
+      const res = await app.addRecord({
+        type,
+        content: content.trim(),
+        mediaList: fileIDs,
+        grade,
+        location: location.trim() || '未知地点',
+        date,
+        author: userInfo.nickName || userInfo.nickname || '攀岩小达人'
+      })
+
+      if (res.result.code === 0) {
+        wx.showToast({ title: '发布成功', icon: 'success' })
+        setTimeout(() => {
+          wx.switchTab({ url: '/pages/index/index' })
+          this.resetForm()
+        }, 800)
+      } else {
+        wx.showToast({ title: res.result.message || '发布失败', icon: 'none' })
+      }
+    } catch (e) {
+      wx.showToast({ title: '发布失败', icon: 'none' })
+    } finally {
+      wx.hideLoading()
     }
-
-    app.addRecord(record)
-    wx.showToast({ title: '发布成功', icon: 'success' })
-
-    setTimeout(() => {
-      wx.switchTab({ url: '/pages/index/index' })
-      this.resetForm()
-    }, 800)
   },
 
   resetForm() {

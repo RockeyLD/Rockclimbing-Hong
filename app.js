@@ -6,6 +6,10 @@ App({
   },
 
   onLaunch() {
+    wx.cloud.init({
+      env: 'eduction-cloud1-9g1g39x5d24e6574',
+      traceUser: true
+    })
     this.loadRecords()
     this.checkLoginStatus()
   },
@@ -18,74 +22,51 @@ App({
   },
 
   loadRecords() {
-    try {
-      const records = wx.getStorageSync('climbing_records')
-      if (records) {
-        this.globalData.records = records
+    return wx.cloud.callFunction({
+      name: 'rock-getRecords',
+      data: { page: 1, pageSize: 100 }
+    }).then(res => {
+      if (res.result.code === 0) {
+        this.globalData.records = res.result.data || []
       }
-    } catch (e) {
+    }).catch(() => {
       this.globalData.records = []
-    }
-  },
-
-  saveRecords(records) {
-    this.globalData.records = records
-    wx.setStorageSync('climbing_records', records)
+    })
   },
 
   addRecord(record) {
-    const records = this.globalData.records
-    records.unshift(record)
-    this.saveRecords(records)
+    return wx.cloud.callFunction({
+      name: 'rock-addRecord',
+      data: record
+    })
   },
 
   deleteRecord(id) {
-    const records = this.globalData.records.filter(r => r.id !== id)
-    this.saveRecords(records)
+    return wx.cloud.callFunction({
+      name: 'rock-deleteRecord',
+      data: { id }
+    })
   },
 
   toggleLike(id) {
-    const records = this.globalData.records.map(r => {
-      if (r.id === id) {
-        return {
-          ...r,
-          isLiked: !r.isLiked,
-          likes: r.isLiked ? r.likes - 1 : r.likes + 1
-        }
-      }
-      return r
+    return wx.cloud.callFunction({
+      name: 'rock-updateRecord',
+      data: { id, action: 'like' }
     })
-    this.saveRecords(records)
-    return records.find(r => r.id === id)
   },
 
   addComment(recordId, comment) {
-    const records = this.globalData.records.map(r => {
-      if (r.id === recordId) {
-        const comments = r.comments || []
-        return {
-          ...r,
-          comments: [...comments, comment]
-        }
-      }
-      return r
+    return wx.cloud.callFunction({
+      name: 'rock-addComment',
+      data: { recordId, content: comment.content, author: comment.author }
     })
-    this.saveRecords(records)
-    return records.find(r => r.id === recordId)
   },
 
   deleteComment(recordId, commentId) {
-    const records = this.globalData.records.map(r => {
-      if (r.id === recordId) {
-        return {
-          ...r,
-          comments: (r.comments || []).filter(c => c.id !== commentId)
-        }
-      }
-      return r
+    return wx.cloud.callFunction({
+      name: 'rock-deleteComment',
+      data: { recordId, commentId }
     })
-    this.saveRecords(records)
-    return records.find(r => r.id === recordId)
   },
 
   // 将各种难度格式归一化为 V-scale 数值（V0=0, V1=1, ...）

@@ -48,7 +48,7 @@
       </view>
 
       <view class="comment-list" wx:if="{{record.comments && record.comments.length > 0}}">
-        <view wx:for="{{record.comments}}" wx:key="id" class="comment-item">
+        <view wx:for="{{record.comments}}" wx:key="_id" class="comment-item">
           <view class="comment-avatar">{{item.author ? item.author[0] : '岩'}}</view>
           <view class="comment-body">
             <view class="comment-meta">
@@ -57,7 +57,7 @@
             </view>
             <text class="comment-content">{{item.content}}</text>
           </view>
-          <view class="comment-delete" data-id="{{item.id}}" bindtap="deleteComment">
+          <view class="comment-delete" data-id="{{item._id}}" bindtap="deleteComment">
             <text>删除</text>
           </view>
         </view>

@@ -18,11 +18,22 @@ Page({
     }
   },
 
-  loadData() {
-    const records = app.globalData.records || []
-    const sorted = [...records].sort((a, b) => b.createTime - a.createTime)
-    this.setData({ records: sorted })
-    this.calcStats(records)
+  async loadData() {
+    try {
+      const res = await wx.cloud.callFunction({ name: 'rock-getRecords', data: { page: 1, pageSize: 100 } })
+      if (res.result.code === 0) {
+        const records = (res.result.data || []).map(r => ({
+          ...r,
+          id: r._id,
+          mediaUrls: r.mediaList,
+          isLiked: r.isLiked || false
+        }))
+        this.setData({ records })
+        this.calcStats(records)
+      }
+    } catch (e) {
+      wx.showToast({ title: '加载失败', icon: 'none' })
+    }
   },
 
   calcStats(records) {
@@ -67,11 +78,26 @@ Page({
     wx.previewImage({ urls: [url] })
   },
 
-  toggleLike(e) {
+  async toggleLike(e) {
     const id = e.currentTarget.dataset.id
-    const updated = app.toggleLike(id)
-    const records = this.data.records.map(r => r.id === id ? updated : r)
-    this.setData({ records })
+    try {
+      const res = await app.toggleLike(id)
+      if (res.result.code === 0) {
+        const records = this.data.records.map(r => {
+          if (r.id === id) {
+            return {
+              ...r,
+              isLiked: res.result.liked,
+              likes: res.result.liked ? (r.likes || 0) + 1 : Math.max((r.likes || 0) - 1, 0)
+            }
+          }
+          return r
+        })
+        this.setData({ records })
+      }
+    } catch (e) {
+      wx.showToast({ title: '操作失败', icon: 'none' })
+    }
   },
 
   shareRecord(e) {

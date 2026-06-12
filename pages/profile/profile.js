@@ -36,11 +36,22 @@ Page({
     wx.navigateTo({ url: '/pages/settings/settings' })
   },
 
-  loadData() {
-    const records = [...app.globalData.records].sort((a, b) => b.createTime - a.createTime)
-    this.setData({ records })
-    this.calcStats(records)
-    this.calcGradeDistribution(records)
+  async loadData() {
+    try {
+      const res = await wx.cloud.callFunction({ name: 'rock-getRecords', data: { page: 1, pageSize: 100 } })
+      if (res.result.code === 0) {
+        const records = (res.result.data || []).map(r => ({
+          ...r,
+          id: r._id,
+          mediaUrls: r.mediaList
+        }))
+        this.setData({ records })
+        this.calcStats(records)
+        this.calcGradeDistribution(records)
+      }
+    } catch (e) {
+      wx.showToast({ title: '加载失败', icon: 'none' })
+    }
   },
 
   calcStats(records) {
@@ -89,17 +100,21 @@ Page({
       title: '确认删除',
       content: '删除后无法恢复，是否继续？',
       confirmColor: '#e53935',
-      success: (res) => {
+      success: async (res) => {
         if (res.confirm) {
-          app.deleteRecord(id)
-          this.loadData()
-          wx.showToast({ title: '已删除', icon: 'success' })
+          try {
+            await app.deleteRecord(id)
+            this.loadData()
+            wx.showToast({ title: '已删除', icon: 'success' })
+          } catch (e) {
+            wx.showToast({ title: '删除失败', icon: 'none' })
+          }
         }
       }
     })
   },
 
-  clearAll() {
+  async clearAll() {
     if (this.data.records.length === 0) {
       wx.showToast({ title: '没有记录', icon: 'none' })
       return
@@ -108,11 +123,16 @@ Page({
       title: '确认清空',
       content: '将清空所有记录，是否继续？',
       confirmColor: '#e53935',
-      success: (res) => {
+      success: async (res) => {
         if (res.confirm) {
-          app.saveRecords([])
-          this.loadData()
-          wx.showToast({ title: '已清空', icon: 'success' })
+          try {
+            const tasks = this.data.records.map(r => app.deleteRecord(r.id))
+            await Promise.all(tasks)
+            this.loadData()
+            wx.showToast({ title: '已清空', icon: 'success' })
+          } catch (e) {
+            wx.showToast({ title: '清空失败', icon: 'none' })
+          }
         }
       }
     })
