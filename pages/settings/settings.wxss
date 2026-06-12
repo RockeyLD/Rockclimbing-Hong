@@ -1,0 +1,72 @@
+.settings-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20rpx 0;
+}
+
+.setting-group {
+  background-color: #fff;
+  margin-bottom: 20rpx;
+  padding: 0 30rpx;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.setting-value {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.avatar-preview {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background-color: #2c8f5e;
+  color: #fff;
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.setting-value text {
+  font-size: 30rpx;
+  color: #666;
+}
+
+.desc-text {
+  max-width: 400rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arrow {
+  color: #ccc;
+  font-size: 36rpx;
+}
+
+.logout-item {
+  justify-content: center;
+}
+
+.logout-text {
+  font-size: 30rpx;
+  color: #e53935;
+}

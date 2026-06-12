@@ -1,0 +1,19 @@
+<view class="login-container">
+  <view class="logo-section">
+    <view class="app-logo">🧗</view>
+    <text class="app-name">攀岩记录</text>
+    <text class="app-desc">记录每一次攀登</text>
+  </view>
+
+  <view class="login-section">
+    <button
+      class="wx-login-btn"
+      bindtap="handleLogin"
+      disabled="{{loading}}"
+    >
+      <text wx:if="{{!loading}}">微信一键登录</text>
+      <text wx:if="{{loading}}">登录中...</text>
+    </button>
+    <text class="tips">登录后即可记录和分享你的攀岩旅程</text>
+  </view>
+</view>

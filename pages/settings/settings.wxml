@@ -1,0 +1,34 @@
+<view class="settings-container">
+  <!-- 头像设置 -->
+  <view class="setting-group">
+    <view class="setting-item" bindtap="changeAvatar">
+      <text class="setting-label">头像</text>
+      <view class="setting-value">
+        <view class="avatar-preview">{{userInfo.avatarText}}</view>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="setting-item" bindtap="editNickname">
+      <text class="setting-label">昵称</text>
+      <view class="setting-value">
+        <text>{{userInfo.nickname}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="setting-item" bindtap="editDesc">
+      <text class="setting-label">个人简介</text>
+      <view class="setting-value">
+        <text class="desc-text" wx:if="{{userInfo.desc}}">{{userInfo.desc}}</text>
+        <text class="desc-text default-desc" wx:else>哦？还没有呢 Ⱄⱄᐝ</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 账号操作 -->
+  <view class="setting-group">
+    <view class="setting-item logout-item" bindtap="logout">
+      <text class="logout-text">退出登录</text>
+    </view>
+  </view>
+</view>

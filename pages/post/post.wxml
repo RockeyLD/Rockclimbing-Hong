@@ -1,0 +1,59 @@
+<navigation-bar title="发布记录" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scrollarea safe-bottom" scroll-y type="list">
+  <view class="container">
+    <view class="form-card">
+      <!-- 媒体上传 -->
+      <view class="form-item">
+        <text class="label">照片 / 视频</text>
+        <view class="media-upload">
+          <view wx:for="{{mediaList}}" wx:key="*this" class="media-preview">
+            <image src="{{item}}" mode="aspectFill" class="preview-img" data-index="{{index}}" bindtap="previewMedia" />
+            <view class="delete-btn" data-index="{{index}}" catchtap="deleteMedia">×</view>
+          </view>
+          <view class="upload-btn" bindtap="chooseMedia" wx:if="{{mediaList.length < 9}}">
+            <text class="upload-icon">+</text>
+            <text class="upload-text">添加</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 描述 -->
+      <view class="form-item">
+        <text class="label">描述</text>
+        <textarea class="desc-input" placeholder="记录这次攀岩的感受..." maxlength="500" bindinput="onInputContent" value="{{content}}" />
+        <text class="char-count">{{content.length}}/500</text>
+      </view>
+
+      <!-- 难度 -->
+      <view class="form-item">
+        <text class="label">难度等级</text>
+        <input class="text-input" placeholder="例如：V2、5.10a" value="{{grade}}" bindinput="onInputGrade" />
+      </view>
+
+      <!-- 攀岩地点 -->
+      <view class="form-item">
+        <text class="label">攀岩地点</text>
+        <input class="text-input" placeholder="例如：岩时攀岩馆" value="{{location}}" bindinput="onInputLocation" />
+      </view>
+
+      <!-- 日期 -->
+      <view class="form-item">
+        <text class="label">日期</text>
+        <picker mode="date" value="{{date}}" bindchange="onDateChange">
+          <view class="picker-value">{{date}}</view>
+        </picker>
+      </view>
+
+      <!-- 类型 -->
+      <view class="form-item">
+        <text class="label">类型</text>
+        <view class="type-selector">
+          <view class="type-option {{type === 'image' ? 'selected' : ''}}" data-type="image" bindtap="selectType">照片</view>
+          <view class="type-option {{type === 'video' ? 'selected' : ''}}" data-type="video" bindtap="selectType">视频</view>
+        </view>
+      </view>
+
+      <button class="btn-primary submit-btn" bindtap="submit">发布记录</button>
+    </view>
+  </view>
+</scroll-view>

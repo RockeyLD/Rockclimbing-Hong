@@ -1,7 +1,68 @@
-<!--index.wxml-->
-<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF"></navigation-bar>
-<scroll-view class="scrollarea" scroll-y type="list">
+<navigation-bar title="🧗 攀岩记录" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scrollarea safe-bottom" scroll-y type="list" refresher-enabled refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh">
   <view class="container">
-    Weixin
+    <!-- 统计概览 -->
+    <view class="stats-bar">
+      <view class="stat-item">
+        <text class="stat-num">{{stats.total}}</text>
+        <text class="stat-label">总记录</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{stats.maxGrade}}</text>
+        <text class="stat-label">最高难度</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-num">{{stats.thisMonth}}</text>
+        <text class="stat-label">本月攀爬</text>
+      </view>
+    </view>
+
+    <!-- 记录列表 -->
+    <view wx:for="{{records}}" wx:key="id" class="record-card" bindtap="goDetail" data-id="{{item.id}}">
+      <view class="card-header flex-between">
+        <view class="flex-center">
+          <view class="avatar">{{item.author ? item.author[0] : '岩'}}</view>
+          <view class="author-info">
+            <text class="author-name">{{item.author || '匿名'}}</text>
+            <text class="post-time">{{item.date}}</text>
+          </view>
+        </view>
+        <view class="tag tag-grade">{{item.grade}}</view>
+      </view>
+
+      <view class="card-content">
+        <text class="content-text">{{item.content}}</text>
+        <view class="media-grid" wx:if="{{item.mediaUrls && item.mediaUrls.length > 0}}">
+          <image wx:for="{{item.mediaUrls}}" wx:for-item="url" wx:key="*this" src="{{url}}" mode="aspectFill" class="media-img {{item.mediaUrls.length === 1 ? 'single' : ''}}" data-url="{{url}}" catchtap="previewImage" lazy-load />
+          <view wx:if="{{item.type === 'video'}}" class="video-badge">▶ 视频</view>
+        </view>
+        <view class="location-tag">
+          <text class="loc-icon">📍</text>
+          <text>{{item.location}}</text>
+        </view>
+      </view>
+
+      <view class="card-footer flex-between">
+        <view class="action-btn {{item.isLiked ? 'liked' : ''}}" catchtap="toggleLike" data-id="{{item.id}}">
+          <text>{{item.isLiked ? '♥' : '♡'}}</text>
+          <text>{{item.likes || 0}}</text>
+        </view>
+        <view class="action-btn" catchtap="shareRecord" data-id="{{item.id}}">
+          <text>↗</text>
+          <text>分享</text>
+        </view>
+        <view class="action-btn">
+          <text>💬</text>
+          <text>{{item.comments ? item.comments.length : 0}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{records.length === 0}}" class="empty-state">
+      <text style="font-size: 80rpx;">🏔</text>
+      <text>还没有攀岩记录</text>
+      <text style="font-size: 24rpx; margin-top: 10rpx;">点击底部"发布"开始记录你的攀岩旅程</text>
+    </view>
   </view>
 </scroll-view>

@@ -1,0 +1,186 @@
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+/* 用户信息 */
+.user-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 0;
+  background: linear-gradient(135deg, #2c8f5e, #3daa73);
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+}
+.user-header:active {
+  opacity: 0.9;
+}
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: #fff;
+  color: #2c8f5e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+.user-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #fff;
+}
+.user-desc {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 8rpx;
+}
+
+/* 统计网格 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+.stat-box {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+.stat-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #2c8f5e;
+}
+.stat-name {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+/* 卡片通用 */
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+.clear-btn {
+  font-size: 24rpx;
+  color: #e53935;
+  font-weight: normal;
+}
+
+/* 难度分布 */
+.grade-bar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+.grade-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.grade-label {
+  width: 80rpx;
+  font-size: 24rpx;
+  color: #666;
+  text-align: right;
+  flex-shrink: 0;
+}
+.grade-track {
+  flex: 1;
+  height: 24rpx;
+  background: #f0f0f0;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+.grade-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2c8f5e, #3daa73);
+  border-radius: 12rpx;
+  transition: width 0.5s ease;
+}
+.grade-count {
+  width: 40rpx;
+  font-size: 24rpx;
+  color: #999;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* 记录列表 */
+.record-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.record-item:last-child {
+  border-bottom: none;
+}
+.record-thumb {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  background: #f0f0f0;
+  flex-shrink: 0;
+}
+.record-thumb.no-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+}
+.record-info {
+  flex: 1;
+  min-width: 0;
+}
+.record-content {
+  display: block;
+  font-size: 28rpx;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 12rpx;
+}
+.record-meta {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.record-date {
+  font-size: 22rpx;
+  color: #999;
+}
+.record-actions {
+  flex-shrink: 0;
+}
+.delete-icon {
+  font-size: 32rpx;
+  padding: 16rpx;
+}
